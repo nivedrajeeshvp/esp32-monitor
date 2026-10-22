@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080e19">
+  <title>ESP32 Monitor | Gas & Environment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+
+    <header class="topbar">
+      <a class="brand" href="#">
+        <div class="brand-icon">E</div>
+        <div>
+          <strong>GAS & ENVIRONMENT <span>MONITOR</span></strong>
+          <small>ENVIRONMENTAL INTELLIGENCE</small>
+        </div>
+      </a>
+
+      <div class="connection">
+        <span class="pulse-dot"></span>
+        <span id="connectionStatus">CONNECTING</span>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <p class="eyebrow">ESP32 · REAL-TIME TELEMETRY</p>
+          <h1>Environmental<br><span>Intelligence Center.</span></h1>
+          <p class="hero-description">
+            Real-time gas response and environmental monitoring.
+          </p>
+        </div>
+
+        <div class="system-card">
+          <div class="system-icon">✳</div>
+          <div>
+            <small>SYSTEM STATUS</small>
+            <h2 id="systemStatus">INITIALIZING</h2>
+            <p id="lastUpdated">Waiting for sensor data...</p>
+            <p id="dataSourceBadge" class="data-source-badge">LIVE ESP32 DATA</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section-heading">
+        <div>
+          <p class="eyebrow">01 / GAS DETECTION</p>
+          <h2>Sensor telemetry</h2>
+        </div>
+        <span class="unit-note">RAW ADC · 12-BIT</span>
+      </section>
+
+      <section class="sensor-grid">
+        <article class="sensor-card cyan-card">
+          <div class="card-top">
+            <div class="sensor-symbol">M3</div>
+            <span class="sensor-tag">CHANNEL 01</span>
+          </div>
+          <h3>MQ-3</h3>
+          <p class="sensor-description">Alcohol-sensitive response</p>
+          <div class="metric">
+            <span id="mq3">---</span>
+            <small>ADC</small>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="barMq3"></div>
+          </div>
+          <div class="card-bottom">
+            <span>Signal level</span>
+            <strong id="statusMq3">WAITING</strong>
+          </div>
+          <div class="voltage-line">
+            ADC pin voltage <span id="vMq3">-- V</span>
+          </div>
+          <div class="sensor-meta-grid">
+            <div><span>Target</span><strong id="gasMq3">--</strong></div>
+            <div><span>Rs</span><strong id="rsMq3">-- Ω</strong></div>
+            <div><span>Rs/R0</span><strong id="ratioMq3">--</strong></div>
+            <div><span>PPM</span><strong id="ppmMq3">PPM UNAVAILABLE</strong></div>
+          </div>
+        </article>
+
+        <article class="sensor-card purple-card">
+          <div class="card-top">
+            <div class="sensor-symbol">M137</div>
+            <span class="sensor-tag">CHANNEL 02</span>
+          </div>
+          <h3>MQ-137</h3>
+          <p class="sensor-description">Ammonia-sensitive response</p>
+          <div class="metric">
+            <span id="mq137">---</span>
+            <small>ADC</small>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="barMq137"></div>
+          </div>
+          <div class="card-bottom">
+            <span>Signal level</span>
+            <strong id="statusMq137">WAITING</strong>
+          </div>
+          <div class="voltage-line">
+            ADC pin voltage <span id="vMq137">-- V</span>
+          </div>
+          <div class="sensor-meta-grid">
+            <div><span>Target</span><strong id="gasMq137">--</strong></div>
+            <div><span>Rs</span><strong id="rsMq137">-- Ω</strong></div>
+            <div><span>Rs/R0</span><strong id="ratioMq137">--</strong></div>
+            <div><span>PPM</span><strong id="ppmMq137">PPM UNAVAILABLE</strong></div>
+          </div>
+        </article>
+
+        <article class="sensor-card orange-card">
+          <div class="card-top">
+            <div class="sensor-symbol">M138</div>
+            <span class="sensor-tag">CHANNEL 03</span>
+          </div>
+          <h3>MQ-138</h3>
+          <p class="sensor-description">Accetone(VOC)-sensitive response</p>
+          <div class="metric">
+            <span id="mq138">---</span>
+            <small>ADC</small>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="barMq138"></div>
+          </div>
+          <div class="card-bottom">
+            <span>Signal level</span>
+            <strong id="statusMq138">WAITING</strong>
+          </div>
+          <div class="voltage-line">
+            ADC pin voltage <span id="vMq138">-- V</span>
+          </div>
+          <div class="sensor-meta-grid">
+            <div><span>Target</span><strong id="gasMq138">--</strong></div>
+            <div><span>Rs</span><strong id="rsMq138">-- Ω</strong></div>
+            <div><span>Rs/R0</span><strong id="ratioMq138">--</strong></div>
+            <div><span>PPM</span><strong id="ppmMq138">PPM UNAVAILABLE</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-heading environment-heading">
+        <div>
+          <p class="eyebrow">02 / CLIMATE</p>
+          <h2>Environmental conditions</h2>
+        </div>
+        <span class="unit-note">SHT31 . I²C</span>
+      </section>
+
+      <section class="environment-grid">
+        <article class="environment-card temperature-card">
+          <div class="environment-symbol">°</div>
+          <div>
+            <p class="sensor-description">AMBIENT TEMPERATURE</p>
+            <div class="environment-value">
+              <span id="temperature">--.-</span><small>°C</small>
+            </div>
+            <p class="environment-footer">Temperature measurement</p>
+          </div>
+        </article>
+
+        <article class="environment-card humidity-card">
+          <div class="environment-symbol">≈</div>
+          <div>
+            <p class="sensor-description">RELATIVE HUMIDITY</p>
+            <div class="environment-value">
+              <span id="humidity">--.-</span><small>%</small>
+            </div>
+            <p class="environment-footer">Moisture in the air</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="system-footer">
+        <div class="footer-mark">E</div>
+        <div>
+          <strong>GAS & ENVIRONMENT MONITOR <span class="footer-version">· PROTOTYPE</span></strong>
+          <p>
+            This prototype is not a certified gas detector or life-safety device.
+            MQ readings remain diagnostic and may be unavailable until circuit and calibration data are verified.
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
