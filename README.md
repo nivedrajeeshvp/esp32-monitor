@@ -1,24 +1,53 @@
 # Nexus Monitor — ESP32 Gas & Environmental Monitoring System
 
-An ESP32-based gas and environmental monitoring system integrating MQ-series gas sensors, an SHT31 temperature and humidity sensor, embedded firmware, and a web-based monitoring dashboard.
+An ESP32-based embedded IoT project integrating multi-gas sensing, temperature and humidity monitoring, custom PCB design, and a web-based monitoring dashboard.
+
+<p align="center">
+  <strong>Embedded Systems · IoT · PCB Design · Sensor Integration</strong>
+</p>
+
+---
 
 ## Overview
 
-Nexus Monitor is an embedded IoT project designed to collect gas-sensor readings and environmental measurements using an ESP32 development board. The system combines sensor interfacing, Wi-Fi connectivity, an HTTP API, and a web interface to present monitoring data.
+**Nexus Monitor** is an ESP32-based gas and environmental monitoring system designed to acquire sensor readings and present monitoring data through a web interface.
 
-The project also includes custom schematic and PCB design work using KiCad.
+The system integrates MQ-series gas sensors, an SHT31 temperature and humidity sensor, ESP32 analog and I²C interfaces, Wi-Fi connectivity, an HTTP API, and a web dashboard. The hardware design includes a custom circuit schematic and PCB layout created using KiCad.
 
-## Features
+The project combines embedded firmware development, electronic circuit design, sensor interfacing, and web technologies in a single platform.
 
-- **Gas monitoring:** Interface with MQ-3, MQ-137, and MQ-138 gas sensors.
-- **Environmental monitoring:** Measure temperature and relative humidity using the SHT31 sensor.
-- **ADC-based acquisition:** Read analog gas-sensor signals through the ESP32 ADC.
-- **I²C communication:** Communicate with the SHT31 sensor.
-- **Wi-Fi connectivity:** Configure the ESP32 for wireless access point operation.
-- **HTTP API:** Make sensor readings available to the web dashboard.
-- **Web dashboard:** Display monitoring information through HTML, CSS, and JavaScript.
-- **LittleFS:** Store web assets in the ESP32 flash filesystem.
-- **PCB design:** Develop circuit schematics and PCB layouts using KiCad.
+## Key Features
+
+- **Multi-gas sensing:** Interfaces with MQ-3, MQ-137, and MQ-138 gas sensor modules.
+- **Environmental monitoring:** Uses the SHT31 sensor for temperature and relative humidity measurements.
+- **ADC acquisition:** Reads analog signals from gas sensor modules through the ESP32 ADC.
+- **I²C communication:** Interfaces with the SHT31 sensor.
+- **Wireless connectivity:** Supports ESP32 Wi-Fi access point operation.
+- **HTTP API:** Makes sensor data available to the web interface.
+- **Web dashboard:** Displays sensor telemetry using HTML, CSS, and JavaScript.
+- **LittleFS integration:** Supports storing web assets in the ESP32 flash filesystem.
+- **Custom PCB design:** Includes circuit schematic development and PCB layout in KiCad.
+- **PlatformIO workflow:** Supports firmware building and uploading through PlatformIO.
+
+## Project Screenshots
+
+### Web Dashboard
+
+![Nexus Monitor web dashboard](docs/images/dashboard.png)
+
+*Dashboard interface displaying simulated sensor readings in local demo mode. These values are illustrative and are not confirmed live hardware measurements.*
+
+### Circuit Schematic
+
+![ESP32 gas and environmental monitoring schematic](docs/images/schematic.png)
+
+*Circuit design showing the ESP32 development board, MQ-series gas sensor connectors, SHT31 interface, and LM2596-based power supply.*
+
+### PCB Layout
+
+![Nexus Monitor PCB layout](docs/images/pcb-layout.png)
+
+*PCB layout showing the ESP32 footprint, gas sensor connectors, power supply components, and routed connections.*
 
 ## Hardware Components
 
@@ -29,21 +58,47 @@ The project also includes custom schematic and PCB design work using KiCad.
 | MQ-137 gas sensor | Gas-sensing input |
 | MQ-138 gas sensor | Gas-sensing input |
 | SHT31 sensor | Temperature and relative humidity measurement |
-| Custom PCB | Sensor and microcontroller circuit integration |
+| LM2596-based buck converter | DC-DC power conversion circuit |
+| Passive components | Filtering, voltage conditioning, and circuit support |
+| Custom PCB | Integration of the microcontroller and sensor interfaces |
 
-*Confirm the exact sensor modules, board revision, and circuit connections against your hardware before fabrication or deployment.*
+*Verify component variants and circuit ratings against the actual schematic and datasheets before assembling or powering the hardware.*
 
 ## Software and Technologies
 
-- **Firmware:** C/C++, Arduino framework
-- **Microcontroller platform:** ESP32
-- **Build environment:** PlatformIO
+- **Programming:** C, C++, Embedded C
+- **Microcontroller:** ESP32
+- **Framework:** Arduino
+- **Build system:** PlatformIO
 - **Sensor libraries:** Adafruit SHT31 Library, Adafruit BusIO
-- **Communication:** I²C, Wi-Fi, HTTP
-- **Web technologies:** HTML5, CSS3, JavaScript
-- **Filesystem:** LittleFS
-- **PCB design:** KiCad
+- **Communication:** ADC, I²C, Wi-Fi, HTTP
+- **Web development:** HTML5, CSS3, JavaScript
+- **Embedded filesystem:** LittleFS
+- **Electronic design automation:** KiCad
 - **Version control:** Git and GitHub
+- **Deployment:** Vercel for the existing web dashboard
+
+## System Architecture
+
+```text
+ MQ-3 Gas Sensor ─────┐
+ MQ-137 Gas Sensor ───┼──> ESP32 ADC ────────┐
+ MQ-138 Gas Sensor ───┘                      │
+                                             │
+ SHT31 Sensor ─────────── I²C ───────────────┤
+                                             ▼
+                                    ESP32 Firmware
+                                             │
+                                      Wi-Fi / HTTP
+                                             │
+                                             ▼
+                                       Web Dashboard
+
+ LM2596 Power Supply ─────> Power Rails
+ KiCad Schematic ─────────> PCB Layout
+```
+
+The ESP32 firmware handles sensor acquisition and communication. The dashboard presents data supplied by the configured interface. Actual live monitoring depends on the firmware, API, and dashboard being correctly integrated and running.
 
 ## Repository Structure
 
@@ -58,6 +113,16 @@ esp32-monitor/
 │   ├── app.js
 │   ├── index.html
 │   └── style.css
+├── docs/
+│   └── images/
+│       ├── schematic.png
+│       ├── pcb-layout.png
+│       └── dashboard.png
+├── hardware/
+│   ├── README.md
+│   ├── *.kicad_pro
+│   ├── *.kicad_sch
+│   └── *.kicad_pcb
 ├── app.js
 ├── index.html
 ├── style.css
@@ -66,20 +131,20 @@ esp32-monitor/
 └── README.md
 ```
 
-The `data/` directory contains the web assets intended for the ESP32 LittleFS filesystem. The root-level web files are retained for the existing web deployment.
+The `hardware/` directory should contain the actual KiCad project files. The screenshot paths under `docs/images/` must match the uploaded filenames.
 
-If KiCad design files are added, they can be organized under a `hardware/` directory.
+The root-level dashboard files are retained for the existing web deployment, while the `data/` directory is used for assets intended for the ESP32 LittleFS filesystem.
 
 ## Getting Started
 
 ### Prerequisites
 
-Install the following software:
+Install the following tools:
 
 1. [Visual Studio Code](https://code.visualstudio.com/)
 2. [PlatformIO IDE](https://platformio.org/install/ide?install=vscode)
 3. USB drivers appropriate for your ESP32 development board
-4. Git, if you intend to clone and modify the repository
+4. Git, for cloning and version control
 
 ### Clone the Repository
 
@@ -88,9 +153,9 @@ git clone https://github.com/nivedrajeeshvp/esp32-monitor.git
 cd esp32-monitor
 ```
 
-### Configure the Firmware
+### PlatformIO Configuration
 
-The current `platformio.ini` configuration uses the ESP32 DevKit board and Arduino framework.
+The project configuration uses the ESP32 DevKit board and the Arduino framework.
 
 ```ini
 [env:esp32dev]
@@ -106,19 +171,17 @@ lib_deps =
     adafruit/Adafruit BusIO
 ```
 
-Open the repository in VS Code with PlatformIO installed.
+### Build the Firmware
 
-### Build and Upload Firmware
-
-Connect your ESP32 development board and select the correct serial port.
-
-Build the firmware:
+Open the project in VS Code with PlatformIO installed, connect the ESP32 board, and run:
 
 ```bash
 pio run
 ```
 
-Upload the firmware:
+### Upload the Firmware
+
+Select the correct serial port and upload the compiled firmware:
 
 ```bash
 pio run --target upload
@@ -126,16 +189,14 @@ pio run --target upload
 
 ### Upload LittleFS Assets
 
-Place the web assets intended for the ESP32 filesystem in the `data/` directory.
-
-Build and upload the filesystem image:
+Place the web assets intended for the ESP32 filesystem in the `data/` directory. Then build and upload the filesystem image:
 
 ```bash
 pio run --target buildfs
 pio run --target uploadfs
 ```
 
-**Note:** Uploading a LittleFS image replaces the existing filesystem contents. Keep a backup of any files stored on the device that you need to preserve.
+**Note:** Uploading a new filesystem image replaces the contents of the device's existing LittleFS partition.
 
 ### Monitor Serial Output
 
@@ -145,74 +206,56 @@ pio device monitor
 
 The configured serial baud rate is 115200.
 
-## System Architecture
-
-```text
-MQ-3 ──────┐
-MQ-137 ────┼──> ESP32 ADC ──────┐
-MQ-138 ────┘                    │
-                                ├──> ESP32 Firmware
-SHT31 ──────── I²C ─────────────┘          │
-                                           ▼
-                                      Wi-Fi / HTTP
-                                           │
-                                           ▼
-                                    Web Dashboard
-```
-
-The firmware acquires sensor measurements and provides data to the web interface through the configured wireless and HTTP communication mechanisms.
-
-## Web Dashboard
-
-The project includes a web interface built using HTML, CSS, and JavaScript.
-
-The web assets can be used by the existing web deployment and, where configured, stored in ESP32 flash using LittleFS.
-
-For ESP32-hosted operation, the firmware must serve the relevant assets and expose the HTTP endpoints expected by the dashboard.
-
 ## PCB Design
 
-The project includes KiCad-based electronic circuit design work for integrating the ESP32 and sensor interfaces.
+The hardware design is developed using KiCad and includes:
 
-Planned hardware documentation includes:
+- ESP32 development board connections
+- MQ-series gas sensor connectors
+- SHT31 temperature and humidity sensor interface
+- LM2596-based DC-DC power supply circuit
+- Component footprints and PCB routing
 
-- Schematic files
-- PCB layout files
-- Bill of materials (BOM)
-- Pin mapping and wiring diagrams
-- Fabrication outputs, when available
+The native KiCad files allow the schematic and board layout to be inspected and modified.
 
-Add the corresponding KiCad files and documentation to the repository as they become available.
+Before PCB fabrication, verify component footprints, connector pinouts, trace clearances, current requirements, power ratings, and the regulator circuit against the selected components' datasheets.
 
 ## Calibration and Safety
 
-- MQ-series sensors can require appropriate preheating, calibration, and environmental compensation.
-- Raw ADC values should not be presented as gas concentrations in ppm unless a validated calibration method supports that conversion.
-- Confirm sensor-module output voltages are compatible with the ESP32 ADC input limits.
-- Follow the relevant sensor datasheets and electrical safety guidelines.
+- MQ-series sensors require appropriate preheating and calibration according to their datasheets and intended applications.
+- Raw ADC readings are not equivalent to calibrated gas concentrations in ppm.
+- Do not report gas concentration values without an appropriate calibration method.
+- Verify that every sensor output is compatible with the ESP32 ADC input voltage limits.
+- Check the regulator input range, output voltage, current capacity, thermal performance, and component ratings before powering the circuit.
+- This prototype should not be treated as a certified gas safety alarm or a replacement for industrial safety equipment.
 
-## Project Status
+## Current Project Status
 
-**Development status:** In progress.
+**Development status: In progress.**
 
-The repository contains ESP32 firmware configuration and web-dashboard files. Complete hardware integration, sensor calibration, and end-to-end validation should be documented once testing has been performed.
+The repository includes ESP32 firmware configuration, sensor-interface development, web dashboard assets, and hardware design work.
+
+The dashboard screenshot represents local demo mode with simulated data. Hardware integration, sensor calibration, live end-to-end operation, and PCB validation should only be marked complete after the corresponding tests have been performed.
 
 ## Future Improvements
 
+- Complete hardware integration and validate sensor readings.
+- Implement and verify the live sensor-data connection between firmware and dashboard.
 - Add calibrated gas-concentration estimation where supported.
-- Improve sensor calibration and measurement filtering.
-- Add historical measurement logging and visualization.
-- Expand PCB documentation and component specifications.
-- Add screenshots, wiring diagrams, and hardware test results.
-- Add automated firmware build checks.
+- Improve measurement filtering and sensor calibration.
+- Add historical data logging and trend visualization.
+- Document pin mappings, wiring, and the bill of materials.
+- Include PCB fabrication outputs after design verification.
+- Add firmware build checks and testing documentation.
 
 ## Author
 
 **Nived Rajeesh V P**
 
 - GitHub: [@nivedrajeeshvp](https://github.com/nivedrajeeshvp)
-- Project repository: [esp32-monitor](https://github.com/nivedrajeeshvp/esp32-monitor)
+- Repository: [esp32-monitor](https://github.com/nivedrajeeshvp/esp32-monitor)
+- Live dashboard: [ESP32 Monitor](https://esp32-monitor-eight.vercel.app/)
 
 ## License
 
-A license has not yet been specified. Add an appropriate open-source license before granting others permission to reuse, modify, or distribute the project.
+No license has been specified yet. Add a suitable open-source license if you intend to permit others to reuse, modify, and distribute this project.
